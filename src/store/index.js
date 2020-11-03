@@ -127,7 +127,11 @@ export default createStore({
       obj.name = event;
     },
     addItem(_, { list, itemName, itemCount, itemChildren }) {
-      list.push({ name: itemName, count: itemCount, children: itemChildren });
+      list.push({
+        name: itemName,
+        count: itemCount,
+        children: itemChildren
+      });
     }
   },
   actions: {
@@ -143,8 +147,20 @@ export default createStore({
   },
   getters: {
     getItems({ items }) {
+      for (let item of items) {
+        item.count = sumUp(item);
+      }
       return items;
     }
-  },
-  modules: {}
+  }
 });
+
+function sumUp(object) {
+  if (object.children.length) {
+    object.count = 0;
+    for (let child of object.children) {
+      object.count += sumUp(child);
+    }
+  }
+  return object.count;
+}

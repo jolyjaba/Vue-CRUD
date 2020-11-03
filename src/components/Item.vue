@@ -2,8 +2,9 @@
   <li class="table__row">
     <div class="table__column table__column--name">
       <input
-        :class="{ disabled: isReadonly }"
+        type="text"
         :value="item.name"
+        :class="{ disabled: isReadonly }"
         :readonly="isReadonly"
         @change="onChangeName($event.target.value.trim(), item)"
       />
@@ -22,7 +23,12 @@
       </div>
     </div>
     <div class="table__column table__column--count">
-      <p>{{ item.count }}</p>
+      <input
+        type="number"
+        :value="item.count"
+        :class="{ disabled: true }"
+        :readonly="true"
+      />
     </div>
     <div class="table__column table__column--actions">
       <img
@@ -111,23 +117,42 @@ export default {
   margin-right: 10px;
 }
 
-.table__column--name {
-  > input {
-    margin: 10px 15px;
-    font-size: 20px;
-    padding: 0 5px;
-    border: 2px solid darkcyan {
-      radius: 5px;
+.table__column {
+  &--name {
+    > input {
+      margin: 10px 15px;
+      font-size: 20px;
+      padding: 0 5px;
+      border: 2px solid darkcyan {
+        radius: 5px;
+      }
+      &.disabled {
+        border-color: transparent;
+        outline: unset;
+        box-shadow: unset;
+      }
     }
-    &.disabled {
-      border-color: transparent;
-      outline: unset;
-      box-shadow: unset;
+    .add-button__icon {
+      margin-right: 10px;
+      cursor: pointer;
     }
   }
-  .add-button__icon {
-    margin-right: 10px;
-    cursor: pointer;
+  &--count {
+    position: relative;
+    > input {
+      position: absolute;
+      padding: 0 10px;
+      font-size: 18px;
+      border: 2px solid darkcyan {
+        radius: 5px;
+      }
+      max-width: 100px;
+      &.disabled {
+        border-color: transparent;
+        outline: unset;
+        box-shadow: unset;
+      }
+    }
   }
 }
 
