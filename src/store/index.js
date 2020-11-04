@@ -123,8 +123,9 @@ export default createStore({
     deleteItem(_, { item, items }) {
       items.splice(items.indexOf(item), 1);
     },
-    changeName(_, { event, obj }) {
-      obj.name = event;
+    updateItem(_, { item, name, count }) {
+      item.name = name;
+      item.count = count;
     },
     addItem(_, { list, itemName, itemCount, itemChildren }) {
       list.push({
@@ -138,8 +139,8 @@ export default createStore({
     onDeleteItem({ commit }, payload) {
       commit("deleteItem", payload);
     },
-    onChangeName({ commit }, payload) {
-      commit("changeName", payload);
+    onUpdateItem({ commit }, payload) {
+      commit("updateItem", payload);
     },
     onAddItem({ commit }, payload) {
       commit("addItem", payload);
@@ -148,7 +149,7 @@ export default createStore({
   getters: {
     getItems({ items }) {
       for (let item of items) {
-        item.count = sumUp(item);
+        item.totalCount = sumUp(item);
       }
       return items;
     }
@@ -156,11 +157,9 @@ export default createStore({
 });
 
 function sumUp(object) {
-  if (object.children.length) {
-    object.count = 0;
-    for (let child of object.children) {
-      object.count += sumUp(child);
-    }
+  object.totalCount = object.count;
+  for (let child of object.children) {
+    object.totalCount += sumUp(child);
   }
-  return object.count;
+  return object.totalCount;
 }

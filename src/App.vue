@@ -32,8 +32,10 @@
             :items="getItems"
             :key="`${item.name}-${index}`"
             @delete-item="onDeleteModalOpen"
-            @change-name="onChangeName"
+            @input-name="onInputName"
+            @input-count="onInputCount"
             @add-item-to-child="onAddModalOpen"
+            @update-item="onUpdateModalOpen"
           />
         </ul>
       </div>
@@ -54,6 +56,16 @@
     @input-name="onInputName"
     @input-count="onInputCount"
   />
+  <modal-block
+    :isDeleteBlock="false"
+    :isUpdateBlock="true"
+    :isModalOpen="isUpdateModalOpen"
+    :onModalOpen="onUpdateModalOpen"
+    :onConfirm="onConfirmUpdateItem"
+    :itemForm="itemForm"
+    @input-name="onInputName"
+    @input-count="onInputCount"
+  />
 </template>
 
 <script>
@@ -67,7 +79,9 @@ export default {
   data: () => ({
     isDeleteModalOpen: false,
     isAddModalOpen: false,
+    isUpdateModalOpen: false,
     itemToDelete: null,
+    itemToUpdate: null,
     listToAdd: null,
     itemForm: {
       itemName: "",
@@ -76,13 +90,24 @@ export default {
     }
   }),
   methods: {
-    ...mapActions(["onDeleteItem", "onChangeName", "onAddItem"]),
+    ...mapActions(["onDeleteItem", "onAddItem", "onUpdateItem"]),
     onDeleteModalOpen(obj) {
       this.isDeleteModalOpen = !this.isDeleteModalOpen;
       if (this.isDeleteModalOpen) {
         this.itemToDelete = obj;
       } else {
         this.itemToDelete = null;
+      }
+    },
+    onUpdateModalOpen(obj) {
+      this.isUpdateModalOpen = !this.isUpdateModalOpen;
+      if (this.isUpdateModalOpen) {
+        this.itemToUpdate = obj;
+        this.itemForm.itemName = obj.name;
+        this.itemForm.itemCount = obj.count ? obj.count : 0;
+      } else {
+        this.itemForm.itemName = "";
+        this.itemForm.itemCount = "";
       }
     },
     onAddModalOpen(obj) {
@@ -115,6 +140,14 @@ export default {
       } else {
         alert("Заполните поля название!");
       }
+    },
+    onConfirmUpdateItem() {
+      this.onUpdateItem({
+        item: this.itemToUpdate,
+        name: this.itemForm.itemName,
+        count: this.itemForm.itemCount
+      });
+      this.onUpdateModalOpen();
     },
     onInputName(value) {
       this.itemForm.itemName = value;
@@ -177,6 +210,9 @@ export default {
   &__section {
     display: flex;
     flex-direction: column;
+    max-width: 1200px;
+    margin: auto;
+    width: 100%;
     &--add {
       padding: 10px 20px;
       align-items: flex-start;
@@ -208,7 +244,7 @@ export default {
     }
     &--count,
     &--actions {
-      flex: 1;
+      width: 12vw;
     }
     &--city {
       &-name,

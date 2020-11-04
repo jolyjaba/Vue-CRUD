@@ -14,14 +14,16 @@
       </div>
       <div v-if="!isDeleteBlock" class="modal-block__form">
         <div class="modal-block__form modal-block__form--name">
-          <label for="name">Введите название</label>
+          <label for="name">{{
+            isUpdateBlock ? "Название" : "Введите название"
+          }}</label>
           <input
             placeholder="Название"
             type="text"
             name="name"
             id="name"
             :value="itemForm.itemName"
-            @change="onChangeName($event.target.value.trim())"
+            @change="onChangeName"
           />
         </div>
         <div class="modal-block__form modal-block__form--count">
@@ -32,21 +34,20 @@
             name="count"
             id="count"
             :value="itemForm.itemCount"
-            @change="onChangeCount($event.target.value)"
+            @change="onChangeCount"
           />
         </div>
       </div>
       <div class="modal-block__buttons">
         <div class="modal-block__cancel" @click="onModalOpen">Отмена</div>
-        <div
-          v-if="isDeleteBlock"
-          class="modal-block__confirm"
-          @click="onConfirm"
-        >
-          Подтверждаю
-        </div>
-        <div v-else class="modal-block__confirm" @click="onConfirm">
-          Добавить
+        <div class="modal-block__confirm" @click="onConfirm">
+          {{
+            isDeleteBlock
+              ? "Подтверждаю"
+              : isUpdateBlock
+              ? "Обновить"
+              : "Добавить"
+          }}
         </div>
       </div>
     </div>
@@ -56,20 +57,21 @@
 
 <script>
 export default {
-  name: "modal-block",
+  name: "ModalBlock",
   props: {
     isDeleteBlock: { type: Boolean, required: true },
+    isUpdateBlock: { type: Boolean, required: false },
     isModalOpen: { type: Boolean, required: true },
     onModalOpen: { type: Function, required: true },
     onConfirm: { type: Function, required: true },
     itemForm: { type: Object, required: false }
   },
   methods: {
-    onChangeName(value) {
-      this.$emit("input-name", value);
+    onChangeName($event) {
+      this.$emit("input-name", $event.target.value.trim());
     },
-    onChangeCount(value) {
-      this.$emit("input-count", value);
+    onChangeCount($event) {
+      this.$emit("input-count", $event.target.value);
     }
   }
 };
@@ -154,6 +156,7 @@ export default {
     }
   }
   &__overlay {
+    cursor: pointer;
     position: absolute;
     top: 0;
     width: 100vw;
