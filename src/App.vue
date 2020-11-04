@@ -142,12 +142,16 @@ export default {
       }
     },
     onConfirmUpdateItem() {
-      this.onUpdateItem({
-        item: this.itemToUpdate,
-        name: this.itemForm.itemName,
-        count: this.itemForm.itemCount
-      });
-      this.onUpdateModalOpen();
+      if (this.itemForm.itemName) {
+        this.onUpdateItem({
+          item: this.itemToUpdate,
+          name: this.itemForm.itemName,
+          count: this.itemForm.itemCount
+        });
+        this.onUpdateModalOpen();
+      } else {
+        alert("Заполните поля название!");
+      }
     },
     onInputName(value) {
       this.itemForm.itemName = value;
