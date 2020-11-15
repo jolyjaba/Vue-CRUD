@@ -87,8 +87,8 @@ export default {
     },
     onDeleteItem() {
       this.$emit("delete-item", {
-        item: this.$props.item,
-        items: this.$props.items
+        item: this.item,
+        items: this.items
       });
     },
     onDeleteChild(obj) {

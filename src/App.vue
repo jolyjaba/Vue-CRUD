@@ -42,30 +42,38 @@
     </div>
   </div>
   <modal-block
-    :isDeleteBlock="true"
     :isModalOpen="isDeleteModalOpen"
     :onModalOpen="onDeleteModalOpen"
     :onConfirm="onConfirmDeleteItem"
-  />
+  >
+    <template #message>Вы точно хотите удалить?</template>
+    <template #label-text>Введите название</template>
+    <template #button>Подтверждаю</template>
+  </modal-block>
   <modal-block
-    :isDeleteBlock="false"
     :isModalOpen="isAddModalOpen"
     :onModalOpen="onAddModalOpen"
     :onConfirm="onConfirmAddItem"
     :itemForm="itemForm"
     @input-name="onInputName"
     @input-count="onInputCount"
-  />
+  >
+    <template #message>Добавление</template>
+    <template #label-text>Введите название</template>
+    <template #button>Добавить</template>
+  </modal-block>
   <modal-block
-    :isDeleteBlock="false"
-    :isUpdateBlock="true"
     :isModalOpen="isUpdateModalOpen"
     :onModalOpen="onUpdateModalOpen"
     :onConfirm="onConfirmUpdateItem"
     :itemForm="itemForm"
     @input-name="onInputName"
     @input-count="onInputCount"
-  />
+  >
+    <template #message>Изменение</template>
+    <template #label-text>Название</template>
+    <template #button>Обновить</template>
+  </modal-block>
 </template>
 
 <script>
